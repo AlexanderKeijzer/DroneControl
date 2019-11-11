@@ -19,11 +19,20 @@ namespace DroneControl {
         Vec3 forces;
         double mass;
 
+        Vec3 rot;
+        Vec3 a_vel;
+        Vec3 moments;
+        Vec3 a_mass;
+
+
     public:
         WorldObject(Vec3 pos, double mass);
-        void update() override;
-        void step(const double &dt) override;
-        void addForce(const Vec3 &force);
+        WorldObject(Vec3 pos, double mass, Vec3 rot, Vec3 a_mass);
+        virtual void update() override;
+        virtual void step(const double &dt) override;
+        virtual void addForce(const Vec3 &force);
+        virtual void addForce(const Vec3 &force, const Vec3 &pos);
+        virtual void addMoment(const Vec3 & moment);
     };
 }
 

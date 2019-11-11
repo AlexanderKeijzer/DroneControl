@@ -13,8 +13,7 @@ namespace DroneControl {
     void run() {
         using namespace std::this_thread;
         using namespace std::chrono;
-        objects.push_back(new WorldObject(Vec3(1.1, 1.2, 1.4), 5));
-        objects.push_back(new WorldObject(Vec3(1.1, 1.2, 1.4), 500));
+        objects.push_back(new WorldObject(Vec3(1.1, 1.2, 1.4), 5, Vec3(), Vec3(0.00081, 0.00081, 0.00142)));
 
         system_clock::time_point endTime = system_clock::now() + seconds(runtime);
         while(system_clock::now() < endTime) {

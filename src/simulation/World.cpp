@@ -1,4 +1,5 @@
 #include "simulation/World.hpp"
+#include <cmath>
 
 namespace DroneControl {
     Vec3::Vec3() : x(0), y(0), z(0){
@@ -28,6 +29,48 @@ namespace DroneControl {
     void Vec3::zero()
     {
         x = y = z = 0;
+    }
+
+    double Vec3::dotProduct(const Vec3 &vec1, const Vec3 &vec2)
+    {
+        return vec1.x * vec2.x + vec1.y * vec2.y + vec1.z * vec2.z;
+    }
+
+    double Vec3::dotProduct(const Vec3 &vec) const
+    {
+        return x * vec.x + y * vec.y + z * vec.z;
+    }
+
+    Vec3 Vec3::crossProduct(const Vec3 &vec1, const Vec3 &vec2)
+    {
+        return Vec3(vec1.y * vec2.z - vec1.z * vec2.y, vec1.z * vec2.x - vec1.x * vec2.z, vec1.x * vec2.y - vec1.y * vec2.x);
+    }
+
+    Vec3 Vec3::rotate(const Vec3 &rotation) const {
+        double s, c, x_temp, y_temp, z_temp;
+
+        Vec3 r(x, y, z);
+        s = std::sin(rotation.z);
+        c = std::cos(rotation.z);
+        x_temp = r.x*c - r.y*s;
+        y_temp = r.x*s + r.y*c;
+        z_temp = r.z;
+        r.set(x_temp, y_temp, z_temp);
+
+        s = std::sin(rotation.y);
+        c = std::cos(rotation.y);
+        x_temp = r.x*c + r.z*s;
+        y_temp = r.y;
+        z_temp = -r.x*s + r.z*c;
+        r.set(x_temp, y_temp, z_temp);
+
+        s = std::sin(rotation.x);
+        c = std::cos(rotation.x);
+        x_temp = r.x;
+        y_temp = r.y*c - r.z*s;
+        z_temp = r.y*s + r.z*c;
+        r.set(x_temp, y_temp, z_temp);
+        return r;
     }
 
     void Vec3::addX(const double &value) { x += value; }
@@ -73,6 +116,11 @@ namespace DroneControl {
         x *= value;
         y *= value;
         z *= value;
+    }
+
+    Vec3 Vec3::operator/(const Vec3 &vector) const
+    {
+        return Vec3(x / vector.x, y / vector.y, z / vector.z);
     }
 
     Vec3 Vec3::operator/(const double &value) const
