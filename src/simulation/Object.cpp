@@ -2,6 +2,13 @@
 #include <iostream>
 
 namespace DroneControl {
+
+    void Object::update() {
+    }
+
+    void Object::step(const double &dt) {
+    }
+
     WorldObject::WorldObject(Vec3 pos, double mass) : pos(pos), mass(mass) {
     };
 
@@ -9,6 +16,7 @@ namespace DroneControl {
     };
 
     void WorldObject::update() {
+        addForce(Vec3(0, 0, 9.81*mass));
         addForce(Vec3(0, -0.001, 0), Vec3(0, 0, 1));
         addForce(Vec3(0, -0.001, 0), Vec3(1, 0, 0));
         std::cout << rot.getX() << ":" << rot.getY() << ":" << rot.getZ() << std::endl;
@@ -29,6 +37,14 @@ namespace DroneControl {
         moments.zero();
     }
 
+    const Vec3& WorldObject::getPos() {
+        return pos;
+    }
+
+    const Vec3& WorldObject::getRot() {
+        return rot;
+    }
+
     void WorldObject::addForce(const Vec3 &force) {
         forces += force;
     }
@@ -42,9 +58,25 @@ namespace DroneControl {
         moments += moment;
     }
 
-    void Object::update() {
+    SubWorldObject::SubWorldObject(WorldObject &parent, Vec3 relPos, double mass) 
+        : WorldObject(parent.getPos()+relPos, mass, parent.getRot(), Vec3()), parent(parent), relPos(relPos) {
+    };
+
+    void SubWorldObject::update() {
+        //Forces can be added to a subobject externally. If they update after this subobject,
+        //this means the effect of that force on its parent could be delayed by one tick.
+        //However, if the update order is constant we should not see double addition of forces from one source.
+        addForce(Vec3(0, 0, mass*9.81));
+        parent.addForce(forces, relPos);
+        forces.zero();
+        parent.addMoment(moments);
+        moments.zero();
     }
 
-    void Object::step(const double &dt) {
+    void SubWorldObject::step(const double &dt) {
+        //For now we don't care abuot velocities.
+        //We might lag one tick behind if this updates before its parent.
+        pos = parent.getPos() + relPos;
+        rot = parent.getRot();
     }
 }
