@@ -35,6 +35,8 @@ namespace DroneControl {
         void addY(const double &value);
         void addZ(const double &value);
 
+        void display() const;
+
         Vec3 operator+(const Vec3 &vector) const;
         void operator+=(const Vec3 &vector);
         Vec3 operator-(const Vec3 &vector) const;

@@ -1,8 +1,10 @@
 #ifndef DRONECONTROL_OBJECT_HPP
 #define DRONECONTROL_OBJECT_HPP
 
-#include <iostream>
+#include "simulation/Object.hpp"
 #include "simulation/Vec3.hpp"
+#include <iostream>
+#include <vector>
 
 namespace DroneControl {
     class Object {
@@ -11,6 +13,8 @@ namespace DroneControl {
 
         virtual void step(const double &dt);
     };
+
+    class SubWorldObject;
 
     class WorldObject : public Object {
     protected:
@@ -23,11 +27,13 @@ namespace DroneControl {
         Vec3 a_vel;
         Vec3 moments;
         Vec3 a_mass;
+        std::vector<SubWorldObject*> children;
 
 
     public:
         WorldObject(Vec3 pos, double mass);
         WorldObject(Vec3 pos, double mass, Vec3 rot, Vec3 a_mass);
+        virtual ~WorldObject();
         virtual void update() override;
         virtual void step(const double &dt) override;
         virtual const Vec3& getPos();
@@ -42,7 +48,6 @@ namespace DroneControl {
         WorldObject &parent;
         Vec3 relPos;
         //TODO: relRot?
-        double mass;
 
     public:
         SubWorldObject(WorldObject &parent, Vec3 relPos, double mass);

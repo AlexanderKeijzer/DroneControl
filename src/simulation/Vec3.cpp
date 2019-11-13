@@ -1,5 +1,6 @@
 #include "simulation/Vec3.hpp"
 #include <cmath>
+#include <iostream>
 
 namespace DroneControl {
     Vec3::Vec3() : x(0), y(0), z(0){
@@ -76,6 +77,11 @@ namespace DroneControl {
     void Vec3::addX(const double &value) { x += value; }
     void Vec3::addY(const double &value) { y += value; }
     void Vec3::addZ(const double &value) { z += value; }
+
+    void Vec3::display() const
+    {
+        std::cout << "X: " << x << "\t Y: " << y << "\t Z: " << z << std::endl;
+    }
 
     Vec3 Vec3::operator+(const Vec3 &vector) const
     {

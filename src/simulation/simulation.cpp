@@ -1,5 +1,6 @@
 #include "simulation/Object.hpp"
 #include "simulation/simulation.hpp"
+#include "simulation/Drone.hpp"
 #include <vector>
 #include <chrono>
 #include <thread>
@@ -13,7 +14,8 @@ namespace DroneControl {
     void run() {
         using namespace std::this_thread;
         using namespace std::chrono;
-        objects.push_back(new WorldObject(Vec3(1.1, 1.2, 1.4), 5, Vec3(), Vec3(0.00081, 0.00081, 0.00142)));
+        Drone* d = new Drone(Vec3(0, 0, 0), 0.5, Vec3(), Vec3(0.00081, 0.00081, 0.00142));
+        objects.push_back(d);
 
         system_clock::time_point endTime = system_clock::now() + seconds(runtime);
         while(system_clock::now() < endTime) {
@@ -35,6 +37,7 @@ namespace DroneControl {
         }
         for (Object* obj : objects) {
             obj->step(timestep);
+            dynamic_cast<WorldObject*>(obj)->getPos().display();
         }
     }
 }
