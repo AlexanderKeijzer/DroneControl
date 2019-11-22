@@ -14,7 +14,7 @@ namespace DroneControl {
     void run() {
         using namespace std::this_thread;
         using namespace std::chrono;
-        Drone* d = new Drone(Vec3(0, 0, 0), 0.5, Vec3(), Vec3(0.00081, 0.00081, 0.00142));
+        Drone* d = new Drone(Vec3(), 0.5, Vec3(0, 0, 0), Vec3(0.00081, 0.00081, 0.00142)); //1.571
         objects.push_back(d);
 
         system_clock::time_point endTime = system_clock::now() + seconds(runtime);

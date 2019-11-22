@@ -27,8 +27,6 @@ namespace DroneControl {
             child->update();
         }
         addForce(Vec3(0, 0, -9.81*mass));
-        //addForce(Vec3(0, -0.001, 0), Vec3(0, 0, 1));
-        //addForce(Vec3(0, -0.001, 0), Vec3(1, 0, 0));
         std::cout << rot.getX() << ":" << rot.getY() << ":" << rot.getZ() << std::endl;
     }
 
@@ -48,6 +46,18 @@ namespace DroneControl {
         a_vel += moments/a_mass.rotate(rot)*dt;
         rot += a_vel*dt;
         moments.zero();
+    }
+
+    void WorldObject::addChild(SubWorldObject* child) {
+        if (child != nullptr) {
+            // TODO: This is not correct. The centre of mass will move. Currently the position
+            // of an object is the centre of mass position. To fix this problem we need
+            // to split those.
+            mass += child->mass;
+            Vec3 chilRelPos = child->getRelPos();
+            a_mass += Vec3(chilRelPos*chilRelPos*child->mass);
+            children.push_back(child);
+        }
     }
 
     const Vec3& WorldObject::getPos() {
@@ -79,7 +89,6 @@ namespace DroneControl {
         //Forces can be added to a subobject externally. If they update after this subobject,
         //this means the effect of that force on its parent could be delayed by one tick.
         //However, if the update order is constant we should not see double addition of forces from one source.
-        addForce(Vec3(0, 0, -mass*9.81));
         parent.addForce(forces, relPos);
         forces.zero();
         parent.addMoment(moments);
@@ -90,5 +99,9 @@ namespace DroneControl {
         //For now we don't care abuot velocities.
         pos = parent.getPos() + relPos;
         rot = parent.getRot();
+    }
+
+    const Vec3& SubWorldObject::getRelPos() {
+        return relPos;
     }
 }

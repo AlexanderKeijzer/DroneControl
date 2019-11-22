@@ -10,5 +10,7 @@ namespace DroneControl {
     public:
         Drone(Vec3 pos, double mass, Vec3 rot, Vec3 a_mass);
         virtual void update() override;
+        bool setLift(int motor, double lift);
+        double getLift(int motor);
     };
 }

@@ -9,5 +9,6 @@ namespace DroneControl {
         Motor(WorldObject &parent, Vec3 relPos, double mass, double maxLift);
         virtual void update();
         void setLift(double lift);
+        double getLift();
     };
 }

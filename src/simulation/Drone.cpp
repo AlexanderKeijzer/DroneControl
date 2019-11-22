@@ -9,8 +9,7 @@ namespace DroneControl {
         double radMotor = 2*M_PI/nMotors;
         for (int i = 0; i < nMotors; i++) {
             Vec3 relPos(sin(radMotor*i)*dMotors, cos(radMotor*i)*dMotors, 0);
-            children.push_back(new Motor(*this, relPos, 0.15, 5));
-            //TODO: Subobjects should add inertia and mass
+            addChild(new Motor(*this, relPos, 0.15, 5));
         }
     };
 
@@ -21,4 +20,18 @@ namespace DroneControl {
         WorldObject::update();
         forces.display();
     };
+
+    bool Drone::setLift(int motor, double lift) {
+        if (children.size() >= motor) {
+            return false;
+        }
+        dynamic_cast<Motor*>(children[motor])->setLift(lift);
+    }
+
+    double Drone::getLift(int motor) {
+        if (children.size() >= motor) {
+            return 0;
+        }
+        return dynamic_cast<Motor*>(children[motor])->getLift();
+    }
 }

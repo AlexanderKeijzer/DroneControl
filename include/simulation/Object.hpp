@@ -36,6 +36,7 @@ namespace DroneControl {
         virtual ~WorldObject();
         virtual void update() override;
         virtual void step(const double &dt) override;
+        virtual void addChild(SubWorldObject* child);
         virtual const Vec3& getPos();
         virtual const Vec3& getRot();
         virtual void addForce(const Vec3 &force);
@@ -53,6 +54,7 @@ namespace DroneControl {
         SubWorldObject(WorldObject &parent, Vec3 relPos, double mass);
         virtual void update() override;
         virtual void step(const double &dt) override;
+        virtual const Vec3& getRelPos();
     };
 }
 
