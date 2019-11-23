@@ -1,14 +1,16 @@
-cmake_minimum_required(VERSION 3.0.0)
+cmake_minimum_required(VERSION 3.4)
 project(DroneControl VERSION 0.1.0)
 
-include(CTest)
-enable_testing()
+add_subdirectory(simulation)
+#add_subdirectory(visualization)
 
-include_directories(include)
+include_directories(${DroneControlSimulation_INCLUDE_DIRS})
+#include_directories(${DroneControlVisualization_INCLUDE_DIRS})
 
-file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS "src/*.cpp" "include/*.hpp")
+add_executable(${PROJECT_NAME} main.cpp)
 
-add_executable(${PROJECT_NAME} ${SOURCES})
+target_link_libraries(${PROJECT_NAME} DroneControlSimulation)
+#target_link_libraries(${PROJECT_NAME} DroneControlVisualization)
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})

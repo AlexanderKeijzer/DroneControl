@@ -1,0 +1,6 @@
+[submodule "visualization/magnum"]
+	path = visualization/magnum
+	url = https://github.com/mosra/magnum.git
+[submodule "visualization/corrade"]
+	path = visualization/corrade
+	url = https://github.com/mosra/corrade.git
