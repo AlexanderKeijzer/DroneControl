@@ -14,4 +14,6 @@ add_subdirectory(magnum EXCLUDE_FROM_ALL)
 add_subdirectory(src)
 
 set(${PROJECT_NAME}_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/src
+                                 ${PROJECT_SOURCE_DIR}/magnum/src
+                                 ${PROJECT_SOURCE_DIR}/corrade/src
     CACHE INTERNAL "${PROJECT_NAME}: Include Directories" FORCE)

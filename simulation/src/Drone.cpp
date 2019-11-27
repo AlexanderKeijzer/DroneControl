@@ -18,7 +18,7 @@ namespace DroneControl {
             dynamic_cast<Motor*>(child)->setLift(-getPos().getZ());
         }
         WorldObject::update();
-        forces.display();
+        //forces.display();
     };
 
     bool Drone::setLift(int motor, double lift) {

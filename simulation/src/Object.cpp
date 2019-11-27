@@ -27,7 +27,7 @@ namespace DroneControl {
             child->update();
         }
         addForce(Vec3(0, 0, -9.81*mass));
-        std::cout << rot.getX() << ":" << rot.getY() << ":" << rot.getZ() << std::endl;
+        //std::cout << rot.getX() << ":" << rot.getY() << ":" << rot.getZ() << std::endl;
     }
 
     void WorldObject::step(const double &dt) {

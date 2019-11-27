@@ -1,9 +1,11 @@
-#include "Object.hpp"
 #include "simulation.hpp"
 #include "Drone.hpp"
 #include <vector>
 #include <chrono>
 #include <thread>
+#include <mutex>
+
+extern std::mutex objectMutex;
 
 namespace DroneControl {
     std::vector<Object*> objects;
@@ -34,9 +36,14 @@ namespace DroneControl {
         for (Object* obj : objects) {
             obj->update();
         }
+        std::lock_guard<std::mutex> guard(objectMutex);
         for (Object* obj : objects) {
             obj->step(timestep);
-            dynamic_cast<WorldObject*>(obj)->getPos().display();
+            //dynamic_cast<WorldObject*>(obj)->getPos().display();
         }
+    }
+
+    const std::vector<Object*> &getObjects() {
+        return objects;
     }
 }
