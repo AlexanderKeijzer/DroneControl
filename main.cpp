@@ -11,8 +11,9 @@ std::mutex objectMutex;
 int main(int argc, char** argv) {
     std::thread simulationThread(DroneControl::run);
     std::thread visualizationThread(DroneControl::startVisualization, argc, argv);
-    
-    simulationThread.join();
+
     visualizationThread.join();
+    DroneControl::kill();
+    simulationThread.join();
     return 0;
 }

@@ -15,7 +15,7 @@ namespace DroneControl {
 
     void Drone::update() {
         for (SubWorldObject* child : children) {
-            dynamic_cast<Motor*>(child)->setLift(-getPos().getZ());
+            dynamic_cast<Motor*>(child)->setLift(-getPos().getZ()*1000000);
         }
         WorldObject::update();
         //forces.display();

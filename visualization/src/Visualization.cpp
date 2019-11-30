@@ -23,7 +23,6 @@ using namespace Magnum::Math::Literals;
     Visualization::Visualization(const Arguments& arguments): Platform::Application{arguments} {
         GL::Renderer::enable(GL::Renderer::Feature::DepthTest);
         GL::Renderer::enable(GL::Renderer::Feature::FaceCulling);
-        //Magnum::Platform::Sdl2Application::setMinimalLoopPeriod(20);
 
         const Trade::MeshData3D cube = Primitives::cubeSolid();
 
@@ -66,7 +65,7 @@ using namespace Magnum::Math::Literals;
                 Vec3 pos = drone->getPos();
                 Vec3 rot = drone->getRot();
                 pos.display();
-                _transformation = Matrix4::translation(Vector3(pos.getX()*100, pos.getY()*100, pos.getZ()*100))*Matrix4::rotationX(Rad(rot.getX()))*Matrix4::rotationY(Rad(rot.getY()))*Matrix4::rotationZ(Rad(rot.getZ()));
+                _transformation = Matrix4::translation(Vector3(pos.getX(), pos.getZ(), pos.getY()))*Matrix4::rotationX(Rad(rot.getX()))*Matrix4::rotationY(Rad(rot.getY()))*Matrix4::rotationZ(Rad(rot.getZ()));
             }
         }
 
@@ -80,6 +79,7 @@ using namespace Magnum::Math::Literals;
         _mesh.draw(_shader);
 
         swapBuffers();
+        redraw();
     }
 
     void startVisualization(int argc, char** argv) {

@@ -10,7 +10,8 @@ extern std::mutex objectMutex;
 namespace DroneControl {
     std::vector<Object*> objects;
     double timestep = 0.01;
-    int runtime = 10;
+    int runtime = 10000;
+    bool killSim = false;
 
     void run() {
         using namespace std::this_thread;
@@ -19,7 +20,7 @@ namespace DroneControl {
         objects.push_back(d);
 
         system_clock::time_point endTime = system_clock::now() + seconds(runtime);
-        while(system_clock::now() < endTime) {
+        while(system_clock::now() < endTime && !killSim) {
             system_clock::time_point t = system_clock::now() + milliseconds((int)(timestep*1000));
             step();
             sleep_until(t);
@@ -45,5 +46,9 @@ namespace DroneControl {
 
     const std::vector<Object*> &getObjects() {
         return objects;
+    }
+
+    void kill() {
+        killSim = true;
     }
 }

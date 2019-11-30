@@ -6,6 +6,7 @@ namespace DroneControl {
     void run();
     void step();
     const std::vector<Object*> &getObjects();
+    void kill();
 };
 
 #endif
