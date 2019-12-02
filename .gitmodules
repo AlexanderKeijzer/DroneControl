@@ -4,3 +4,6 @@
 [submodule "visualization/corrade"]
 	path = visualization/corrade
 	url = https://github.com/mosra/corrade.git
+[submodule "control/pybind11"]
+	path = control/pybind11
+	url = https://github.com/pybind/pybind11

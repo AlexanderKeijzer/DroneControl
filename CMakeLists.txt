@@ -3,6 +3,7 @@ project(DroneControl VERSION 0.1.0)
 
 add_subdirectory(simulation)
 add_subdirectory(visualization)
+add_subdirectory(control)
 
 include_directories(${DroneControlSimulation_INCLUDE_DIRS})
 include_directories(${DroneControlVisualization_INCLUDE_DIRS})
