@@ -12,18 +12,14 @@ namespace DroneControl {
     double timestep = 0.01;
     int runtime = 10000;
     bool killSim = false;
+    bool doStep = false;
 
-    void run() {
-        using namespace std::this_thread;
-        using namespace std::chrono;
-        Drone* d = new Drone(Vec3(), 0.5, Vec3(0, 0, 0), Vec3(0.00081, 0.00081, 0.00142)); //1.571
-        objects.push_back(d);
+    void run(bool stepMode) {
 
-        system_clock::time_point endTime = system_clock::now() + seconds(runtime);
-        while(system_clock::now() < endTime && !killSim) {
-            system_clock::time_point t = system_clock::now() + milliseconds((int)(timestep*1000));
-            step();
-            sleep_until(t);
+        if (stepMode) {
+            runStepMode();
+        } else {
+            runTimeMode();
         }
 
         // Clear objects cleanly
@@ -33,7 +29,32 @@ namespace DroneControl {
         objects.clear();
     }
 
+    void runStepMode() {
+        while (doStep) {
+            update();
+            doStep = false;
+        }
+    }
+
     void step() {
+        doStep = true;
+    }
+
+    void runTimeMode() {
+        using namespace std::this_thread;
+        using namespace std::chrono;
+        Drone* d = new Drone(Vec3(), 0.5, Vec3(0, 0, 0), Vec3(0.00081, 0.00081, 0.00142)); //1.571
+        objects.push_back(d);
+
+        system_clock::time_point endTime = system_clock::now() + seconds(runtime);
+        while(system_clock::now() < endTime && !killSim) {
+            system_clock::time_point t = system_clock::now() + milliseconds((int)(timestep*1000));
+            update();
+            sleep_until(t);
+        }
+    }
+
+    void update() {
         for (Object* obj : objects) {
             obj->update();
         }

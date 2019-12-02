@@ -3,8 +3,11 @@
 #include "Object.hpp"
 
 namespace DroneControl {
-    void run();
+    void run(bool stepMode);
+    void runStepMode();
     void step();
+    void runTimeMode();
+    void update();
     const std::vector<Object*> &getObjects();
     void kill();
 };

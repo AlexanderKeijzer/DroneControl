@@ -3,12 +3,13 @@ project(DroneControl VERSION 0.1.0)
 
 add_subdirectory(simulation)
 add_subdirectory(visualization)
-add_subdirectory(control)
+#add_subdirectory(control)
 
 include_directories(${DroneControlSimulation_INCLUDE_DIRS})
 include_directories(${DroneControlVisualization_INCLUDE_DIRS})
 
 add_executable(${PROJECT_NAME} main.cpp)
+add_library(${PROJECT_NAME}Lib STATIC main.cpp)
 
 target_link_libraries(${PROJECT_NAME} DroneControlSimulation)
 target_link_libraries(${PROJECT_NAME} DroneControlVisualization)
