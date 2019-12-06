@@ -1,2 +1,4 @@
 .vscode/
 build/
+DroneControlControl.egg-info/
+*.pyd

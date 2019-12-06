@@ -10,4 +10,7 @@ pybind11_add_module(${PROJECT_NAME} pythonInterface.cpp)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE DroneControlLib)
 target_link_libraries(${PROJECT_NAME} PRIVATE DroneControlSimulation)
-target_link_libraries(${PROJECT_NAME} PRIVATE DroneControlVisualization)
+
+if(WITH_VISUALIZATION)
+    target_link_libraries(${PROJECT_NAME} PRIVATE DroneControlVisualization)
+endif()
