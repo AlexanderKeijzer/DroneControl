@@ -5,19 +5,21 @@
 #include <thread>
 #include <mutex>
 #include <iostream>
+#include <condition_variable>
 
 extern std::mutex objectMutex;
 
 namespace DroneControl {
 
     std::mutex stepMutex;
+    std::condition_variable stepCond; 
+    bool doStep = false;
 
     std::vector<Object*> objects;
     double timestep = 0.01;
     int runtime = 10000;
     bool modeStep;
     bool killSim = false;
-    bool doStep = false;
 
     void run(bool stepMode) {
         modeStep = stepMode;
@@ -42,13 +44,13 @@ namespace DroneControl {
 
     void runStepMode() {
         while (!killSim) {
-            //std::cout << "check" << std::endl;
-            if (doStep) {
+            {
+                std::unique_lock<std::mutex> lck(stepMutex);
+                stepCond.wait(lck, []{ return doStep; });
                 update();
-                std::lock_guard<std::mutex> guard(stepMutex);
                 doStep = false;
-                std::cout << "doStep" << std::endl;
             }
+            stepCond.notify_one();
         }
     }
 
@@ -59,15 +61,11 @@ namespace DroneControl {
         }
         //Read is not locked and it should be in some way
         {
-            std::lock_guard<std::mutex> guard(stepMutex);
+            std::unique_lock<std::mutex> lck(stepMutex);
+            stepCond.wait(lck, []{ return !doStep; });
             doStep = true;
-            std::cout << "stepin" << std::endl;
         }
-        while (doStep) {
-            using namespace std::chrono_literals;
-            std::this_thread::sleep_for(1ms);
-        }
-        std::cout << "stepout" << std::endl;
+        stepCond.notify_one();
     }
 
     void runTimeMode() {
