@@ -7,3 +7,6 @@
 [submodule "control/pybind11"]
 	path = control/pybind11
 	url = https://github.com/pybind/pybind11
+[submodule "visualization/SDL2-2.0.10"]
+	path = visualization/SDL2-2.0.10
+	url = https://github.com/AlexanderKeijzer/SDL2-2.0.10
