@@ -9,6 +9,9 @@ namespace DroneControl {
     void Object::step(const double &dt) {
     }
 
+    void Object::reset() {
+    }
+
     WorldObject::WorldObject(Vec3 pos, double mass) : pos(pos), mass(mass) {
     };
 
@@ -81,6 +84,18 @@ namespace DroneControl {
         moments += moment;
     }
 
+    void WorldObject::reset() {
+        pos = Vec3();
+        vel = Vec3();
+        forces = Vec3();
+        rot = Vec3();
+        a_vel = Vec3();
+        moments = Vec3();
+        for (SubWorldObject* child : children) {
+            child->reset();
+        }
+    }
+
     SubWorldObject::SubWorldObject(WorldObject &parent, Vec3 relPos, double mass) 
         : WorldObject(parent.getPos()+relPos, mass, parent.getRot(), Vec3()), parent(parent), relPos(relPos) {
     };
@@ -103,5 +118,12 @@ namespace DroneControl {
 
     const Vec3& SubWorldObject::getRelPos() {
         return relPos;
+    }
+
+    void SubWorldObject::reset() {
+        pos = relPos;
+        forces = Vec3();
+        rot = Vec3();
+        moments = Vec3();
     }
 }

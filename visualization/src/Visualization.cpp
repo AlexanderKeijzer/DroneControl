@@ -64,7 +64,6 @@ using namespace Magnum::Math::Literals;
                 WorldObject* drone = dynamic_cast<WorldObject*>(objects[0]);
                 Vec3 pos = drone->getPos();
                 Vec3 rot = drone->getRot();
-                pos.display();
                 _transformation = Matrix4::translation(Vector3(pos.getX(), pos.getZ(), pos.getY()))*Matrix4::rotationX(Rad(rot.getX()))*Matrix4::rotationY(Rad(rot.getY()))*Matrix4::rotationZ(Rad(rot.getZ()));
             }
         }

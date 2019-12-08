@@ -3,7 +3,6 @@ project(DroneControl VERSION 0.1.0)
 
 option(WITH_VISUALIZATION "Enable visualization" ON)
 
-
 add_subdirectory(simulation)
 include_directories(${DroneControlSimulation_INCLUDE_DIRS})
 

@@ -14,15 +14,12 @@ namespace DroneControl {
     };
 
     void Drone::update() {
-        for (SubWorldObject* child : children) {
-            dynamic_cast<Motor*>(child)->setLift(-getPos().getZ()*1000000);
-        }
         WorldObject::update();
         //forces.display();
     };
 
     bool Drone::setLift(int motor, double lift) {
-        if (children.size() >= motor) {
+        if (motor >= children.size()) {
             return false;
         }
         dynamic_cast<Motor*>(children[motor])->setLift(lift);
@@ -34,5 +31,9 @@ namespace DroneControl {
             return 0;
         }
         return dynamic_cast<Motor*>(children[motor])->getLift();
+    }
+
+    const int Drone::getNumMotors() {
+        return nMotors;
     }
 }

@@ -4,6 +4,7 @@ project(DroneControlControl)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/../ build)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../)
+include_directories(${DroneControlSimulation_INCLUDE_DIRS})
 
 add_subdirectory(pybind11)
 pybind11_add_module(${PROJECT_NAME} pythonInterface.cpp)

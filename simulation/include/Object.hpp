@@ -10,8 +10,8 @@ namespace DroneControl {
     class Object {
     public:
         virtual void update();
-
         virtual void step(const double &dt);
+        virtual void reset();
     };
 
     class SubWorldObject;
@@ -42,6 +42,7 @@ namespace DroneControl {
         virtual void addForce(const Vec3 &force);
         virtual void addForce(const Vec3 &force, const Vec3 &pos);
         virtual void addMoment(const Vec3 & moment);
+        virtual void reset() override;
     };
 
     class SubWorldObject : public WorldObject {
@@ -55,6 +56,7 @@ namespace DroneControl {
         virtual void update() override;
         virtual void step(const double &dt) override;
         virtual const Vec3& getRelPos();
+        virtual void reset() override;
     };
 }
 

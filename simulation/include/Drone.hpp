@@ -15,6 +15,7 @@ namespace DroneControl {
         virtual void update() override;
         bool setLift(int motor, double lift);
         double getLift(int motor);
+        const int getNumMotors();
     };
 }
 

@@ -24,7 +24,7 @@ namespace DroneControl {
     void run(bool stepMode) {
         modeStep = stepMode;
 
-        std::cout << "Simulation initializing..." << std::endl << stepMode << std::endl;
+        std::cout << "Simulation initializing..." << std::endl << (stepMode ? "Running in step mode" : "Running in time mode") << std::endl;
 
         Drone* d = new Drone(Vec3(), 0.5, Vec3(0, 0, 0), Vec3(0.00081, 0.00081, 0.00142)); //1.571
         objects.push_back(d);
@@ -46,7 +46,9 @@ namespace DroneControl {
         while (!killSim) {
             {
                 std::unique_lock<std::mutex> lck(stepMutex);
-                stepCond.wait(lck, []{ return doStep; });
+                stepCond.wait(lck, []{ return doStep || killSim; });
+                if (killSim)
+                    return;
                 update();
                 doStep = false;
             }
@@ -66,6 +68,36 @@ namespace DroneControl {
             doStep = true;
         }
         stepCond.notify_one();
+    }
+
+    /**
+     * Simple 1D step which returns next state from input lift target.
+     **/
+    const Vec3& step(double lift) {
+        Object* obj = objects[0];
+        Drone* drone = dynamic_cast<Drone*>(obj);
+        {
+            //Wait for a step still finishing
+            std::unique_lock<std::mutex> lck(stepMutex);
+            stepCond.wait(lck, []{ return !doStep; });
+
+            //Set lift on motors
+            int nMotors = drone->getNumMotors();
+            std::lock_guard<std::mutex> guard(objectMutex);
+            for(auto i = 0; i < nMotors; i++) {
+                drone->setLift(i, lift/nMotors);
+                //std::cout << lift/nMotors << std::endl;
+            }
+
+            doStep = true;
+        }
+        //Step with other thread
+        stepCond.notify_one();
+
+        //Wait untill step is finished and return new position
+        std::unique_lock<std::mutex> lck(stepMutex);
+        stepCond.wait(lck, []{ return !doStep; });
+        return drone->getPos();
     }
 
     void runTimeMode() {
@@ -95,7 +127,16 @@ namespace DroneControl {
         return objects;
     }
 
+    const Vec3& reset() {
+        for (Object* obj : objects) {
+            obj->reset();
+        }
+        WorldObject* wo =  dynamic_cast<WorldObject*>(objects[0]);
+        return wo->getPos();
+    }
+
     void kill() {
         killSim = true;
+        stepCond.notify_one();
     }
 }

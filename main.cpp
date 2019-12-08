@@ -14,7 +14,7 @@ std::mutex objectMutex;
 
 int main(int argc, char* argv[]) {
 
-    std::cout << "Starting..." << std::endl << argv[0] << std::endl;
+    std::cout << "Starting..." << std::endl;
     bool stepMode = false;
     if (argc >= 2 && strcmp(argv[1], "step") == 0) {
         stepMode = true;
